@@ -10,9 +10,8 @@ extern crate diesel;
 extern crate dotenv;
 
 mod db;
-use db::*;
 
-use actix_web::{get, middleware, post, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{middleware, post, web, App, HttpResponse, HttpServer, Responder};
 use std::env;
 
 mod constants;
@@ -26,6 +25,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new().wrap(middleware::Logger::default()).service(
             web::scope("/items")
+                .service(item::get_items)
                 .service(item::get_item)
                 .service(item::create_item),
         )

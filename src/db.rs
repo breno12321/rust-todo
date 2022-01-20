@@ -25,6 +25,16 @@ pub fn get_items() -> Vec<Item> {
         .expect("Error loading posts")
 }
 
+pub fn get_item(item_id: String) -> Item {
+    println!("{}", item_id);
+    let connection = establish_connection();
+    items
+        .find(item_id)
+        .get_result::<Item>(&connection)
+        .expect("Error loading posts")
+    // .load::<Item>(&connection)
+}
+
 pub fn create_item(new_item: NewItem) -> NewItem {
     let connection = establish_connection();
 

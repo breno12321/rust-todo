@@ -1,15 +1,22 @@
 use actix_web::{web, Responder, Result};
-use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::db::{self, get_items, models};
+use crate::db::{self, models};
 
 #[get("/")]
-pub async fn get_item() -> Result<impl Responder> {
-    let items = get_items();
+pub async fn get_items() -> Result<impl Responder> {
+    let items = db::get_items();
 
     Ok(web::Json(items))
+}
+
+#[get("/{id}")]
+pub async fn get_item(path: web::Path<String>) -> Result<impl Responder> {
+    let id = path.into_inner();
+    let item = db::get_item(id);
+
+    Ok(web::Json(item))
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -19,12 +26,12 @@ struct CreateItem {
 
 #[post("/")]
 pub async fn create_item(item: web::Json<CreateItem>) -> Result<impl Responder> {
-    let newItem = models::NewItem {
+    let new_item = models::NewItem {
         description: &item.0.description,
         id: &Uuid::new_v4().to_string(),
         done: &false,
     };
-    let items = db::create_item(newItem);
+    let _created_item = db::create_item(new_item);
 
     Ok(item)
 }
