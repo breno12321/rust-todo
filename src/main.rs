@@ -28,6 +28,8 @@ async fn main() -> std::io::Result<()> {
                 .service(item::get_items)
                 .service(item::get_item)
                 .service(item::delete_item)
+                .service(item::update_item_description)
+                .service(item::update_item_done)
                 .service(item::create_item),
         )
     })

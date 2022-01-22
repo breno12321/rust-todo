@@ -42,6 +42,30 @@ pub fn delete_item(item_id: String) -> usize {
     affected_rows
 }
 
+pub fn update_item_description(item_id: String, item_description: String) -> Item {
+    let connection = establish_connection();
+    diesel::update(items.filter(id.eq(item_id.clone())))
+        .set(description.eq(item_description))
+        .execute(&connection)
+        .expect("Error deleting the entity");
+    items
+        .find(item_id.clone())
+        .get_result::<Item>(&connection)
+        .expect("Not Found")
+}
+
+pub fn update_item_done(item_id: String, item_done: bool) -> Item {
+    let connection = establish_connection();
+    diesel::update(items.filter(id.eq(item_id.clone())))
+        .set(done.eq(item_done))
+        .execute(&connection)
+        .expect("Error deleting the entity");
+    items
+        .find(item_id.clone())
+        .get_result::<Item>(&connection)
+        .expect("Not Found")
+}
+
 pub fn create_item(new_item: NewItem) -> NewItem {
     let connection = establish_connection();
 

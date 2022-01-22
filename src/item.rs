@@ -48,3 +48,37 @@ pub async fn create_item(item: web::Json<CreateItem>) -> Result<impl Responder> 
 
     Ok(item)
 }
+
+#[derive(Deserialize)]
+pub struct UpdateItemDescription {
+    pub description: String,
+}
+
+#[patch("/{id}/description")]
+pub async fn update_item_description(
+    path: web::Path<String>,
+    update_item: web::Json<UpdateItemDescription>,
+) -> Result<impl Responder> {
+    let id = path.into_inner();
+    let description = update_item.into_inner().description;
+    let updated_item = db::update_item_description(id, description);
+
+    Ok(web::Json(updated_item))
+}
+
+#[derive(Deserialize)]
+pub struct UpdateItemDone {
+    pub done: bool,
+}
+
+#[patch("/{id}/done")]
+pub async fn update_item_done(
+    path: web::Path<String>,
+    update_item: web::Json<UpdateItemDone>,
+) -> Result<impl Responder> {
+    let id = path.into_inner();
+    let done = update_item.into_inner().done;
+    let updated_item = db::update_item_done(id, done);
+
+    Ok(web::Json(updated_item))
+}
