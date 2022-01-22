@@ -11,7 +11,7 @@ extern crate dotenv;
 
 mod db;
 
-use actix_web::{middleware, post, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{middleware, web, App, HttpServer};
 use std::env;
 
 mod constants;
@@ -27,6 +27,7 @@ async fn main() -> std::io::Result<()> {
             web::scope("/items")
                 .service(item::get_items)
                 .service(item::get_item)
+                .service(item::delete_item)
                 .service(item::create_item),
         )
     })

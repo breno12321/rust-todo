@@ -26,13 +26,20 @@ pub fn get_items() -> Vec<Item> {
 }
 
 pub fn get_item(item_id: String) -> Item {
-    println!("{}", item_id);
     let connection = establish_connection();
     items
         .find(item_id)
         .get_result::<Item>(&connection)
         .expect("Error loading posts")
     // .load::<Item>(&connection)
+}
+
+pub fn delete_item(item_id: String) -> usize {
+    let connection = establish_connection();
+    let affected_rows = diesel::delete(items.filter(id.eq(item_id)))
+        .execute(&connection)
+        .expect("Error deleting the entity");
+    affected_rows
 }
 
 pub fn create_item(new_item: NewItem) -> NewItem {

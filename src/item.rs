@@ -19,8 +19,21 @@ pub async fn get_item(path: web::Path<String>) -> Result<impl Responder> {
     Ok(web::Json(item))
 }
 
+#[derive(Serialize)]
+pub struct DeletedItem {
+    affected_rows: usize,
+}
+
+#[delete("/{id}")]
+pub async fn delete_item(path: web::Path<String>) -> Result<impl Responder> {
+    let id = path.into_inner();
+    let affected_rows = db::delete_item(id);
+
+    Ok(web::Json(DeletedItem { affected_rows }))
+}
+
 #[derive(Debug, Serialize, Deserialize)]
-struct CreateItem {
+pub struct CreateItem {
     description: String,
 }
 

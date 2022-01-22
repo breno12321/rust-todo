@@ -15,3 +15,4 @@ chrono = { version = "0.4", features = ["serde"] }
 uuid = { version = "0.6", features = ["serde", "v4"] }
 diesel = { version = "1.4.8", features = ["sqlite", "chrono"] }
 dotenv = "0.15.0"
+listenfd = "0.3"
